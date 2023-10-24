@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -18,16 +19,29 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class AuthenticationForm extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField tf_username;
 	private JTextField tf_password;
-
+	public static int userID;
 	/**
 	 * Launch the application.
 	 */
+	
+	public int getID() {
+		return userID;
+		
+	}
+	public void setID(int newID) {
+		this.userID = newID;
+	}
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -99,14 +113,41 @@ public class AuthenticationForm extends JFrame {
 	
 		btnLogIn.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        // Create an instance of the EquipmentRequestForm class
-		        EquipmentRequestForm equipmentRequestForm = new EquipmentRequestForm();
+		    	int userID = 0;
+		    	String url = "jdbc:mysql://localhost:3306/equipment_management_db";
+			    String username = "root";
+			    String password = "09242003Believeitcovered.";
+			   
+			    if(tf_username.equals("") || tf_password.equals("")) {
+			    	JOptionPane.showMessageDialog(null, "Please fill in all fields.");
+			    	return;
+			    } else {
+			    	String userNameInput = tf_username.getText();
+			    	String userPasswordInput = tf_password.getText();
+			    	try (Connection connection = DriverManager.getConnection(url, username, password)) {
+						String query = "SELECT usersID FROM account WHERE Username =? && accountPassword = ?";
+						PreparedStatement stmt = connection.prepareStatement(query);
+						stmt.setString(1, userNameInput);
+						stmt.setString(2, userPasswordInput);
+						ResultSet rs = stmt.executeQuery();
+						
+						if(rs.next()) {
+							userID = rs.getInt("usersID");
+							setID(userID);
+						}
+						System.out.println(userID);
+					} catch (SQLException e1) {
+				        e1.printStackTrace();
+				    }
+			    }
+				
+			 // Create an instance of the EquipmentRequestForm class
+		        EquipmentRequestForm ecf = new EquipmentRequestForm();
 
 		        // Make the EquipmentRequestForm visible
-		        equipmentRequestForm.setVisible(true);
+		        ecf.setVisible(true);
 
 		        setVisible(false); // To hide the login form
-
 		    }
 		});
 		
@@ -135,6 +176,5 @@ public class AuthenticationForm extends JFrame {
 		        setVisible(false); // To hide the login form
 		    }
 		});
-
 	}
 }

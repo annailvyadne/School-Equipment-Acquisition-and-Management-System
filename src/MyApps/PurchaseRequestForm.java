@@ -8,8 +8,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JComboBox;
 import java.awt.CardLayout;
+
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -58,10 +63,12 @@ public class PurchaseRequestForm extends JFrame {
 		panel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Supplier Name: ");
-		lblNewLabel_1.setBounds(24, 54, 75, 14);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNewLabel_1.setBounds(28, 54, 111, 14);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("Address:");
+		lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_1_1_1_1.setBounds(28, 79, 90, 14);
 		panel.add(lblNewLabel_1_1_1_1);
 		
@@ -96,17 +103,72 @@ public class PurchaseRequestForm extends JFrame {
 		
 		JLabel lblNewLabel_3 = new JLabel("TechVerse Shop");
 		lblNewLabel_3.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		lblNewLabel_3.setBounds(109, 53, 98, 14);
+		lblNewLabel_3.setBounds(124, 53, 98, 14);
 		panel.add(lblNewLabel_3);
-		
-		JLabel lblNewLabel_3_1 = new JLabel("");
-		lblNewLabel_3_1.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		lblNewLabel_3_1.setBounds(63, 79, 98, 14);
-		panel.add(lblNewLabel_3_1);
 		
 		JLabel lblNewLabel_3_2 = new JLabel("Makati City, Philippines");
 		lblNewLabel_3_2.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		lblNewLabel_3_2.setBounds(77, 78, 130, 14);
+		lblNewLabel_3_2.setBounds(124, 78, 130, 14);
 		panel.add(lblNewLabel_3_2);
 	}
+	
+		//CHECK BOX PROCESS
+	//FIELDS
+	    private JCheckBox airconCheckBox;
+	    private JCheckBox keyboardCheckBox;
+	    private JCheckBox monitorCheckBox;
+	    private JButton generateReportButton;
+		private JCheckBox chairCheckBox;
+		private JCheckBox tableCheckBox;
+		private JButton checkOutBtn;
+	    
+	    public void EquipmentAcquisition() {
+	    	airconCheckBox = new JCheckBox("Aircon");
+	    	keyboardCheckBox = new JCheckBox("Keyboard");
+	        monitorCheckBox = new JCheckBox("Monitor");
+	        tableCheckBox = new JCheckBox("table");
+	        chairCheckBox = new JCheckBox("chair");
+	        
+	        checkOutBtn = new JButton("Check Out");
+	        checkOutBtn.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                CheckOut();
+	            }
+
+				private void CheckOut() {
+					 boolean isAirconSelected = airconCheckBox.isSelected();
+				        boolean isKeyboardSelected = keyboardCheckBox.isSelected();
+				        boolean isMonitorSelected = monitorCheckBox.isSelected();
+				        boolean isTableSelected = tableCheckBox.isSelected();
+				        boolean isChairSelected = chairCheckBox.isSelected();
+				        
+				        // Generate the report based on selected checkboxes
+				        if (isAirconSelected) {
+				            // Include Aircon in the report
+				        }
+				        if (isKeyboardSelected) {
+				            // Include Keyboard in the report
+				        }
+				        if (isMonitorSelected) {
+				            // Include Monitor in the report
+				        }
+				}
+	            
+	        });
+	        
+	        add(airconCheckBox);
+	        add(keyboardCheckBox);
+	        add(monitorCheckBox);
+	        add(tableCheckBox);
+	        add(chairCheckBox);
+	        add(generateReportButton);
+	        
+	        pack();
+	        setLocationRelativeTo(null);	
+
+	    }
+	    
+	    
+	    
 }

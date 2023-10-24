@@ -102,6 +102,22 @@ public class EquipmentAssignmentToRoom extends JFrame {
         lblNewLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lblNewLabel.setBounds(10, 11, 269, 14);
         contentPane.add(lblNewLabel);
+        
+        JButton btn_GoBack = new JButton("Go back");
+        btn_GoBack.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		// Create an instance of the EquipmentRequestForm class
+		        EquipmentControlSystem equipmentControlSystem = new EquipmentControlSystem();
+
+		        // Make the EquipmentRequestForm visible
+		        equipmentControlSystem.setVisible(true);
+
+		        setVisible(false); // To hide the login form
+
+        	}
+        });
+        btn_GoBack.setBounds(30, 199, 89, 23);
+        contentPane.add(btn_GoBack);
 
         assignButton.addActionListener(new ActionListener() {
             @Override
@@ -113,42 +129,49 @@ public class EquipmentAssignmentToRoom extends JFrame {
                 	JOptionPane.showMessageDialog(null, "Please select a room");
                 }
                 
-                
-                
+               
                 String url = "jdbc:mysql://localhost:3306/equipment_management_db";
         	    String username = "root";
         	    String password = "09242003Believeitcovered.";
 
         	    try (Connection connection = DriverManager.getConnection(url, username, password)) {
-        	    	
-        	    	String selectedEquipment = (String) equipmentComboBox.getSelectedItem();
+        	    	String selectedEquipment =(String) equipmentComboBox.getSelectedItem();
+        	    	String selectedRoom = (String) roomComboBox.getSelectedItem();
         	    	System.out.println(selectedEquipment);
-                    String query = "SELECT idEquipmentID FROM equipment WHERE equipmentName = '" + selectedEquipment + "';";
+        	    	System.out.println(selectedRoom);
         	    	
-        	    	 PreparedStatement statement = connection.prepareStatement(query);
-        	    	 System.out.println(query);
-         	         ResultSet resultSet = statement.executeQuery();
-         	         int equipmentID = resultSet.getInt("idEquipmentID");
-         	         System.out.println(equipmentID);
-         	         String selectedRoom = (String) roomComboBox.getSelectedItem();
-         	         query = "SELECT roomID FROM Room WHERE roomName = '" + selectedRoom + "';";
-         	        statement = connection.prepareStatement(query);
-         	        resultSet = statement.executeQuery();
-         	        int roomID = resultSet.getInt("roomID");
-         	        
-         	        query = "INSERT INTO Equipment_has_Room(idEquipmentID,Room_RoomID) VALUES("+ equipmentID + "," + roomID + ")";
-         	        statement = connection.prepareStatement(query);
-         	        resultSet = statement.executeQuery();
-         	        System.out.println(equipmentID);
-         	        System.out.println(roomID);
-         	         
+        	    	String query = "SELECT idEquipmentID FROM equipment WHERE equipmentName = '" + selectedEquipment + "'";
+        	    	
+        	    	PreparedStatement Statement = connection.prepareStatement(query);
+        	    	
+        	    	int equipmentID = 0;
+        	    	ResultSet rs = Statement.executeQuery();
+        	    	if(rs.next()) {
+        	    		equipmentID = rs.getInt("idEquipmentID");
+        	    	}
+        	    	System.out.println(equipmentID);
+        	    	String query2 = "SELECT roomID FROM room WHERE roomName='" + selectedRoom +"'";
+        	    	PreparedStatement Statement2 = connection.prepareStatement(query2);
+        	    	ResultSet rs2 = Statement2.executeQuery();
+        	    	
+        	    	int roomID = 0;
+        	    	if(rs2.next()) {
+        	    		roomID = rs2.getInt("roomID");
+        	    	}
+        	    	
+        	    	System.out.println(roomID);
+        	    	String query3 = "INSERT INTO equipment_has_room(idEquipmentID, Room_RoomID) VALUES("+ equipmentID + "," + roomID + ")";
+        	    	System.out.println(query3);
+        	    	PreparedStatement stmt3 = connection.prepareStatement(query3);
+        	    	 stmt3.executeUpdate();
+        	    	 
+        	    	String query4 ="UPDATE equipment SET eqStatus ='In Used' WHERE idequipmentID = "+ equipmentID;
+        	    	PreparedStatement stmt4 = connection.prepareStatement(query4);
+        	    	stmt4.executeUpdate();
+        	    	
         	    } catch (SQLException e1) {
         	        e1.printStackTrace();
         	    }
-        	    
-              
-               
-        
             }
         });
     }
@@ -163,8 +186,7 @@ public class EquipmentAssignmentToRoom extends JFrame {
 	    String EquipmentName[] = new String[5];
 	   
 	    try (Connection connection = DriverManager.getConnection(url, username, password)) {
-	        String query = "SELECT equipmentName FROM Equipment";
-	        System.out.println("Connected Successfully");
+	       String query = "SELECT equipmentName FROM equipment WHERE eqStatus = 'In Storage'";
 	        
 	        PreparedStatement statement = connection.prepareStatement(query);
 	        ResultSet resultSet = statement.executeQuery();

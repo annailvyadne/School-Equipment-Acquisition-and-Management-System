@@ -5,23 +5,29 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import MyLibs.User;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.JTextPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JDesktopPane;
 
 public class EquipmentRequestForm extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtEquipmentName;
-	private JTextField txtEquipmentType;
-	private JTextField txtCondition;
-	private JTextField txtRoom;
 
 	/**
 	 * Launch the application.
@@ -63,67 +69,29 @@ public class EquipmentRequestForm extends JFrame {
 		lblNewLabel.setBounds(36, 0, 262, 62);
 		panel.add(lblNewLabel);
 		
-		JTextPane tp_fname = new JTextPane();
-		tp_fname.setText("Michelle Dee");
-		tp_fname.setBounds(143, 73, 106, 20);
-		panel.add(tp_fname);
+		String[] eqName = fetchEquipmentName();
+		JComboBox<String> cb_equipmentName = new JComboBox<>(eqName);
+//		JComboBox<String> roomComboBox = new JComboBox<>(putRoomItems);
 		
-		JTextPane tp_Username = new JTextPane();
-		tp_Username.setText("Michelle Dee@example.com");
-		tp_Username.setBounds(143, 104, 173, 20);
-		panel.add(tp_Username);
+		cb_equipmentName.setBounds(185, 198, 153, 22);
+		panel.add(cb_equipmentName);
 		
-		JTextPane tp_Role = new JTextPane();
-		tp_Role.setText("Student");
-		tp_Role.setBounds(143, 135, 173, 20);
-		panel.add(tp_Role);
+		JComboBox cb_condition = new JComboBox();
+		cb_condition.setModel(new DefaultComboBoxModel(new String[] {"Not Working", "Needs Repair" , "Good Condition"}));
+		cb_condition.insertItemAt("Select a Condition", 0);
+		cb_condition.setSelectedIndex(0);
+		cb_condition.setBounds(185, 248, 153, 22);
+		panel.add(cb_condition);
 		
-		txtEquipmentName = new JTextField();
-		txtEquipmentName.setText("Equipment Name:");
-		txtEquipmentName.setBounds(36, 199, 99, 20);
-		panel.add(txtEquipmentName);
-		txtEquipmentName.setColumns(10);
-		
-		txtEquipmentType = new JTextField();
-		txtEquipmentType.setText("Equipment Type:");
-		txtEquipmentType.setColumns(10);
-		txtEquipmentType.setBounds(36, 246, 99, 20);
-		panel.add(txtEquipmentType);
-		
-		txtCondition = new JTextField();
-		txtCondition.setText("Condition:");
-		txtCondition.setColumns(10);
-		txtCondition.setBounds(36, 292, 99, 20);
-		panel.add(txtCondition);
-		
-		txtRoom = new JTextField();
-		txtRoom.setText("Room:");
-		txtRoom.setColumns(10);
-		txtRoom.setBounds(36, 335, 99, 20);
-		panel.add(txtRoom);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Aircon", "Television", "Monitor", "Table", "Chair"}));
-		comboBox.setBounds(185, 198, 153, 22);
-		panel.add(comboBox);
-		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Electronics", "Appliances", "Furnitures"}));
-		comboBox_1.setBounds(185, 245, 153, 22);
-		panel.add(comboBox_1);
-		
-		JComboBox comboBox_1_1 = new JComboBox();
-		comboBox_1_1.setModel(new DefaultComboBoxModel(new String[] {"Not Working", "Needs Repair"}));
-		comboBox_1_1.setBounds(185, 291, 153, 22);
-		panel.add(comboBox_1_1);
-		
-		JComboBox comboBox_1_1_1 = new JComboBox();
-		comboBox_1_1_1.setModel(new DefaultComboBoxModel(new String[] {"MPO301", "MPO302", "MPO303"}));
-		comboBox_1_1_1.setBounds(185, 334, 153, 22);
-		panel.add(comboBox_1_1_1);
+		JComboBox cb_room = new JComboBox();
+		cb_room.setModel(new DefaultComboBoxModel(new String[] {"MPO301", "MPO302", "MPO303"}));
+		cb_room.insertItemAt("Select a Room", 0);
+		cb_room.setSelectedIndex(0);
+		cb_room.setBounds(185, 297, 153, 22);
+		panel.add(cb_room);
 		
 		JButton btnNewButton = new JButton("Submit");
-		btnNewButton.setBounds(121, 382, 89, 23);
+		btnNewButton.setBounds(120, 338, 89, 23);
 		panel.add(btnNewButton);
 		
 		JLabel lblNewLabel_1 = new JLabel("Name:");
@@ -137,5 +105,68 @@ public class EquipmentRequestForm extends JFrame {
 		JLabel lblNewLabel_1_1_1 = new JLabel("Role:");
 		lblNewLabel_1_1_1.setBounds(73, 135, 60, 14);
 		panel.add(lblNewLabel_1_1_1);
+		
+		JLabel lbl_name = new JLabel(getuserInfo());
+		lbl_name.setBounds(143, 73, 67, 14);
+		panel.add(lbl_name);
+		
+		JLabel lbl_username = new JLabel("lbl_username");
+		lbl_username.setBounds(143, 104, 67, 14);
+		panel.add(lbl_username);
+		
+		JLabel lbl_role = new JLabel("lbl_role");
+		lbl_role.setBounds(143, 135, 67, 14);
+		panel.add(lbl_role);
+		
+		JDesktopPane desktopPane = new JDesktopPane();
+		desktopPane.setBounds(261, 249, 1, 1);
+		panel.add(desktopPane);
+		
+		JLabel lblNewLabel_2 = new JLabel("Equipment Name:");
+		lblNewLabel_2.setBounds(36, 202, 103, 14);
+		panel.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Condition:");
+		lblNewLabel_3.setBounds(36, 252, 83, 14);
+		panel.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_3_1 = new JLabel("Room:");
+		lblNewLabel_3_1.setBounds(36, 301, 83, 14);
+		panel.add(lblNewLabel_3_1);
+	}
+
+	    public String [] fetchEquipmentName() {
+		String url = "jdbc:mysql://localhost:3306/equipment_management_db";
+	    String username = "root";
+	    String password = "09242003Believeitcovered.";
+	    String equipmentName[] = new String[5];
+		try (Connection connection = DriverManager.getConnection(url, username, password)) {
+			String query = "SELECT equipmentName FROM equipment WHERE eqStatus != 'In Storage'";
+			PreparedStatement stmt = connection.prepareStatement(query);	
+			ResultSet rs = stmt.executeQuery();
+			
+			int counter = 0;
+			while(rs.next()) {
+				equipmentName[counter] = rs.getString("equipmentName");
+				System.out.println(equipmentName[counter]);
+				counter++;
+			}
+		} catch (SQLException e1) {
+	        e1.printStackTrace();
+	    }
+		
+		
+		return equipmentName;
+		
+	}
+	public void setUserData(String firstName, String lastName, String username, String role) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public String getuserInfo() {
+		AuthenticationForm authForm = new AuthenticationForm();
+		
+		return authForm.getName();
 	}
 }
