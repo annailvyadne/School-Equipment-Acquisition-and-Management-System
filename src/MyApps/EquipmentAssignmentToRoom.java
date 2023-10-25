@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import MyLibs.SingletonDatabaseConnectionManager;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -28,7 +31,7 @@ import java.awt.event.FocusEvent;
 public class EquipmentAssignmentToRoom extends JFrame {
     private JPanel contentPane;
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -39,9 +42,11 @@ public class EquipmentAssignmentToRoom extends JFrame {
                 }
             }
         });
-    }
+    }*/
 
-    public EquipmentAssignmentToRoom() {
+    private int currentUserId;
+    public EquipmentAssignmentToRoom(int userId) {
+    	currentUserId = userId;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         contentPane = new JPanel();
@@ -81,7 +86,7 @@ public class EquipmentAssignmentToRoom extends JFrame {
         	@Override
         	public void mouseClicked(MouseEvent e) {
                 
-        		EquipmentControlSystem EquipmentSystem = new EquipmentControlSystem();
+        		EquipmentControlSystem EquipmentSystem = new EquipmentControlSystem(currentUserId);
         		EquipmentSystem.setVisible(true);
         		dispose();
         		
@@ -107,7 +112,7 @@ public class EquipmentAssignmentToRoom extends JFrame {
         btn_GoBack.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		// Create an instance of the EquipmentRequestForm class
-		        EquipmentControlSystem equipmentControlSystem = new EquipmentControlSystem();
+		        EquipmentControlSystem equipmentControlSystem = new EquipmentControlSystem(currentUserId);
 
 		        // Make the EquipmentRequestForm visible
 		        equipmentControlSystem.setVisible(true);
@@ -128,13 +133,11 @@ public class EquipmentAssignmentToRoom extends JFrame {
                 } else if(roomComboBox.getSelectedIndex() == 0) {
                 	JOptionPane.showMessageDialog(null, "Please select a room");
                 }
-                
-               
-                String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-        	    String username = "root";
-        	    String password = "09242003Believeitcovered.";
+                    
+            	//SINGLETON DESIGN
+        	    SingletonDatabaseConnectionManager connectionManager = SingletonDatabaseConnectionManager.getInstance();
 
-        	    try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        	    try (Connection connection = connectionManager.getConnection()) {
         	    	String selectedEquipment =(String) equipmentComboBox.getSelectedItem();
         	    	String selectedRoom = (String) roomComboBox.getSelectedItem();
         	    	System.out.println(selectedEquipment);
@@ -168,6 +171,7 @@ public class EquipmentAssignmentToRoom extends JFrame {
         	    	String query4 ="UPDATE equipment SET eqStatus ='In Used' WHERE idequipmentID = "+ equipmentID;
         	    	PreparedStatement stmt4 = connection.prepareStatement(query4);
         	    	stmt4.executeUpdate();
+        	    	
         	    	
         	    } catch (SQLException e1) {
         	        e1.printStackTrace();

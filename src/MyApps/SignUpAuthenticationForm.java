@@ -171,7 +171,7 @@ public class SignUpAuthenticationForm extends JFrame {
 			    	stmt2.setInt(1, userID);
 			    	stmt2.setString(2, username);
 			    	stmt2.setString(3, password);
-			    	stmt2.setString(4, "User");
+			    	stmt2.setString(4, role);
 			    	rowsInserted = stmt2.executeUpdate();
 			    	
 			    	System.out.println(rowsInserted);
@@ -232,7 +232,7 @@ public class SignUpAuthenticationForm extends JFrame {
 		String url = "jdbc:mysql://localhost:3306/equipment_management_db";
  	    String username = "root";
  	    String password = "09242003Believeitcovered.";
- 	    String userRole [] = new String[3];
+ 	    String userRole [] = new String[4];
  	    try (Connection connection = DriverManager.getConnection(url, username, password)) {
  	    	String query = "SELECT userRoleName FROM userRole";
  	    	PreparedStatement stmt = connection.prepareStatement(query);

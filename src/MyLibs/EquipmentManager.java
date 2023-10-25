@@ -2,6 +2,8 @@ package MyLibs;
 
 //This class administers EquipmentControlSystem Frame
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 public class EquipmentManager {
 
     private static final String url = "jdbc:mysql://localhost:3306/yourdatabase";
@@ -32,4 +34,3 @@ public class EquipmentManager {
     }
 }
 	
-}

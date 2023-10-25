@@ -3,6 +3,9 @@ package MyApps;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import MyLibs.SingletonDatabaseConnectionManager;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +14,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -44,7 +49,16 @@ public class EquipmentControlSystem extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+    private int currentUserId;
+	public EquipmentControlSystem(int userId) {
+		currentUserId = userId;
+		initControlsAndEvent();		
+	}
+
 	public EquipmentControlSystem() {
+		initControlsAndEvent();
+	}
+	private void initControlsAndEvent() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 543, 420);
 		contentPane = new JPanel();
@@ -75,18 +89,23 @@ public class EquipmentControlSystem extends JFrame {
 		JButton btnReports = new JButton("Equipment Condition Report");
 		btnReports.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//
 				try {
-					Connection Conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/equipment_management_db", "root", "09242003Believeitcovered.");
-					String reportpath = "C:\\Users\\Lyza\\OneDrive\\Desktop\\Reports\\Condition_Report.jrxml";
-					JasperReport jr = JasperCompileManager.compileReport(reportpath);
-					JasperPrint jp = JasperFillManager.fillReport(jr, null, Conn);
-					JasperViewer.viewReport(jp);
-					Conn.close();
+					SingletonDatabaseConnectionManager connectionManager = SingletonDatabaseConnectionManager.getInstance();
+					   
+					Connection Conn = connectionManager.getConnection();
 					
-				} catch(Exception e1) {
-					JOptionPane.showMessageDialog(null, e1);
+					Map<String, Object> parameters = new HashMap<>();
+					String reportpath = "C:/Users/Lyza/JaspersoftWorkspace/MyReports/Condition_Report.jrxml";
+					JasperReport jasperReport =  JasperCompileManager.compileReport(reportpath);
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, Conn);
+
+					JasperViewer.viewReport(jasperPrint);				
+					Conn.close(); 
+
+				}catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, ex);
 				}
-				
 			}
 		});
 		btnReports.setBounds(17, 22, 236, 23);
@@ -105,7 +124,7 @@ public class EquipmentControlSystem extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-			        PurchaseRequestForm prf = new PurchaseRequestForm();
+			        PurchaseRequestForm prf = new PurchaseRequestForm(currentUserId);
 
 			        prf.setVisible(true);
 
@@ -118,8 +137,26 @@ public class EquipmentControlSystem extends JFrame {
 		JButton btnReports1 = new JButton("Purchase Equipment Report");
 		btnReports1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					SingletonDatabaseConnectionManager connectionManager = SingletonDatabaseConnectionManager.getInstance();
+					   
+					Connection Conn = connectionManager.getConnection();
+					
+					Map<String, Object> parameters = new HashMap<>();
+					String reportpath = "C:/Users/Lyza/JaspersoftWorkspace/MyReports/Purchase_Report.jrxml";
+					JasperReport jasperReport =  JasperCompileManager.compileReport(reportpath);
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, Conn);
+
+					JasperViewer.viewReport(jasperPrint);				
+					
+
+				}catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, ex);
+				}
 			}
 		});
+		
 		btnReports1.setBounds(269, 56, 225, 23);
 		contentPane.add(btnReports1);
 		
@@ -131,7 +168,7 @@ public class EquipmentControlSystem extends JFrame {
 		btnEquipmentAssignmentTo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				EquipmentAssignmentToRoom equipmentToRoom = new EquipmentAssignmentToRoom();
+				EquipmentAssignmentToRoom equipmentToRoom = new EquipmentAssignmentToRoom(currentUserId);
 				
 				equipmentToRoom.setVisible(true);
 				dispose();
@@ -146,7 +183,12 @@ public class EquipmentControlSystem extends JFrame {
 		btnViewUsersAccounts.addActionListener(new ActionListener() {
 			private ResultSet resultSet;
 			public void actionPerformed(ActionEvent e) {
-				
+
+		        ViewUsersAccount vua = new ViewUsersAccount();
+
+		        vua.setVisible(true);
+
+		        setVisible(false); 
 			}
 			
 

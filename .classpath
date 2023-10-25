@@ -25,5 +25,7 @@
 	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/openpdf-1.3.30.jaspersoft.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/stax2-api-4.2.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/woodstox-core-6.4.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/commons-dbcp2-2.10.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/commons-pool2-2.12.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

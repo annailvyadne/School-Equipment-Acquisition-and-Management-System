@@ -32,6 +32,7 @@ public class ViewUsersAccount extends JFrame {
 	private JScrollPane scrollPane;
 	private JButton btnShow;
 	private DefaultTableModel tableModel;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -73,7 +74,7 @@ public class ViewUsersAccount extends JFrame {
 		panel.add(lblNewLabel);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 67, 353, 190);
+		scrollPane.setBounds(26, 67, 363, 190);
 		panel.add(scrollPane);
 		
 		tableModel = new DefaultTableModel();
@@ -83,20 +84,58 @@ public class ViewUsersAccount extends JFrame {
 		tableModel.addColumn("Username");
 		tableModel.addColumn("Password");
 		
-		
-		/*tableModel = new DefaultTableModel();
-		tableModel.addColumn("Equipment Name");
-		tableModel.addColumn("Equipment Type");
-		tableModel.addColumn("Condition");
-		tableModel.addColumn("Room");
-		tableModel.addColumn("Status");
-		
-		equipmentTable = new JTable(tableModel);
-		*/
-		
 		table = new JTable(tableModel);
 		scrollPane.setViewportView(table);
+		
+		JButton btnClearData = new JButton("Clear Data");
+		btnClearData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearData();
+			}
+		});
+		
+		
+		btnClearData.setBounds(215, 268, 174, 23);
+		panel.add(btnClearData);
+		
+		btnNewButton = new JButton("Return");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+		        EquipmentControlSystem ecs = new EquipmentControlSystem();
+
+		        ecs.setVisible(true);
+
+		        setVisible(false); 
+			}
+		});
+		btnNewButton.setBounds(26, 268, 159, 23);
+		panel.add(btnNewButton);
 		fetchUser();
+	}
+	
+		private void clearData() {
+		    // Database connection details
+		    String url = "jdbc:mysql://localhost:3306/equipment_management_db";
+		    String username = "root";
+		    String password = "09242003Believeitcovered.";
+
+		    try (Connection connection = DriverManager.getConnection(url, username, password)) {
+		        // Delete existing data from EquipmentAssignmentToRoom table
+		    	String deleteQuery = "DELETE FROM account";
+		        PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+		        deleteStatement.execute(); 
+		        // Commit the changes
+		        
+		        tableModel.removeRow(0);
+		        
+		    } catch (SQLException ex) {
+		        ex.printStackTrace();
+		        // Handle any database-related errors
+
+		        
+		          
+		    }
 		
 	}
 

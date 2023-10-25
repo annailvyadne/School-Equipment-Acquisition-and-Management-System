@@ -4,7 +4,11 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+
+import MyLibs.SingletonDatabaseConnectionManager;
+
 import java.awt.Color;
 import java.awt.Cursor;
 
@@ -25,8 +29,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AuthenticationForm extends JFrame {
 
+public class AuthenticationForm extends JFrame {
+	
 	private JPanel contentPane;
 	private JTextField tf_username;
 	private JTextField tf_password;
@@ -91,7 +96,7 @@ public class AuthenticationForm extends JFrame {
 		panel.add(panel_1_1);
 		panel_1_1.setLayout(null);
 		
-		tf_password = new JTextField();
+		tf_password = new JPasswordField();
 		tf_password.setBounds(0, 0, 223, 32);
 		panel_1_1.add(tf_password);
 		tf_password.setColumns(10);
@@ -114,9 +119,8 @@ public class AuthenticationForm extends JFrame {
 		btnLogIn.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	int userID = 0;
-		    	String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-			    String username = "root";
-			    String password = "09242003Believeitcovered.";
+		    	String accountType;
+		    	SingletonDatabaseConnectionManager connectionManager = SingletonDatabaseConnectionManager.getInstance();
 			   
 			    if(tf_username.equals("") || tf_password.equals("")) {
 			    	JOptionPane.showMessageDialog(null, "Please fill in all fields.");
@@ -124,30 +128,42 @@ public class AuthenticationForm extends JFrame {
 			    } else {
 			    	String userNameInput = tf_username.getText();
 			    	String userPasswordInput = tf_password.getText();
-			    	try (Connection connection = DriverManager.getConnection(url, username, password)) {
-						String query = "SELECT usersID FROM account WHERE Username =? && accountPassword = ?";
+			    	try (Connection connection = connectionManager.getConnection()) {
+						String query = "SELECT usersID, accountType FROM account WHERE Username =? && accountPassword = ?";
 						PreparedStatement stmt = connection.prepareStatement(query);
 						stmt.setString(1, userNameInput);
 						stmt.setString(2, userPasswordInput);
 						ResultSet rs = stmt.executeQuery();
 						
 						if(rs.next()) {
+							/*ito yong part kung saan magpapasa si login form ng userID papunta sa ibang class or frame
+							  need ng userID sa requestForm at sa purchaseForm
+							*/
 							userID = rs.getInt("usersID");
-							setID(userID);
+							accountType = rs.getString("accountType");
+							 
+					        switch(accountType) {
+						        case "Student":
+						        case "Faculty":
+						        case "Non-Teaching Staff":
+						        	EquipmentRequestForm ecf = new EquipmentRequestForm(userID);
+									ecf.setVisible(true);
+						        	break;
+						        	
+						        case "Equipment Manager":
+						        	EquipmentControlSystem ecs = new EquipmentControlSystem(userID);
+						        	ecs.setVisible(true);
+						        	break;
+					        }
+					     				    
+					   
+					        setVisible(false); // To hide the login form
 						}
 						System.out.println(userID);
 					} catch (SQLException e1) {
 				        e1.printStackTrace();
 				    }
 			    }
-				
-			 // Create an instance of the EquipmentRequestForm class
-		        EquipmentRequestForm ecf = new EquipmentRequestForm();
-
-		        // Make the EquipmentRequestForm visible
-		        ecf.setVisible(true);
-
-		        setVisible(false); // To hide the login form
 		    }
 		});
 		
