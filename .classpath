@@ -27,5 +27,8 @@
 	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/woodstox-core-6.4.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/commons-dbcp2-2.10.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/commons-pool2-2.12.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/activation-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/javax.mail-api-1.6.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Lyza/Downloads/jar_files/javax.mail-1.6.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

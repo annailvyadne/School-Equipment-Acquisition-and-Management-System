@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 
 import com.mysql.cj.jdbc.Driver;
 
+import MyLibs.EquipmentInfo;
+import MyLibs.ObserverAdmin;
 import MyLibs.SingletonDatabaseConnectionManager;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -74,8 +76,35 @@ public class PurchaseRequestForm extends JFrame {
 	 */
 	
 	private int currentUserId;
-	
+	private ObserverAdmin[] admin = new ObserverAdmin[3];
 	public PurchaseRequestForm(int userId) {
+		
+		EquipmentInfo[] equiment = new EquipmentInfo[5];
+	    equiment[0] = new EquipmentInfo("Aircon", 6000, "Working");
+	    equiment[1] = new EquipmentInfo("Monitor", 2000, "Working");
+	    equiment[2] = new EquipmentInfo("Keyboard", 800, "Working");
+	    equiment[3] = new EquipmentInfo("Table", 150, "Working");
+	    equiment[4] = new EquipmentInfo("Chair", 100, "Working");
+	
+		SingletonDatabaseConnectionManager connectionManager = SingletonDatabaseConnectionManager.getInstance();
+		   
+		try (Connection connection = connectionManager.getConnection()) {
+			String query = "SELECT Username FROM account";
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			int i = 0;			
+			while(rs.next()) {
+				String username = rs.getString("Username");
+				admin[i] = new ObserverAdmin(username, equiment);
+				i++;
+			}
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		
+		
 		currentUserId = userId;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 547, 350);
@@ -196,18 +225,23 @@ public class PurchaseRequestForm extends JFrame {
 
 				if(chkAircon.isSelected()) {
 					insertOrder(currentUserId, 1);
+					equiment[0].setCondition("Not Working");
 				}
 				if(chkChair.isSelected()) {
 					insertOrder(currentUserId, 5) ;
+					equiment[4].setCondition("Not Working");
 				}
 				if(chkTable.isSelected()) {
 					insertOrder(currentUserId, 4);
+					equiment[3].setCondition("Not Working");
 				}
 				if(chkMonitor.isSelected()) {
 					insertOrder(currentUserId, 2);
+					equiment[1].setCondition("Not Working");
 				}
 				if(chkKeyboard.isSelected()) {
 					insertOrder(currentUserId, 3);
+					equiment[2].setCondition("Not Working");
 				}
 				
 			}
