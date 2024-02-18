@@ -11,8 +11,8 @@ public class SingletonDatabaseConnectionManager {
     private SingletonDatabaseConnectionManager() {
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/equipment_management_db");
-        dataSource.setUsername("root");
-        dataSource.setPassword("09242003Believeitcovered.");
+        dataSource.setUsername("[username]"); //username 
+        dataSource.setPassword("[password]"); //password
     }
 
     public static synchronized SingletonDatabaseConnectionManager getInstance() {
