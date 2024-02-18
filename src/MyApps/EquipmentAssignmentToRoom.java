@@ -185,8 +185,8 @@ public class EquipmentAssignmentToRoom extends JFrame {
 	    // Database connection details
 
 	    String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-	    String username = "root";
-	    String password = "09242003Believeitcovered.";
+	    String username = "[username]"; //I didn't use my username to publicize the code
+	    String password = "[password]"; //I didn't use my password to publicize the code
 	    String EquipmentName[] = new String[5];
 	   
 	    try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -214,8 +214,8 @@ public class EquipmentAssignmentToRoom extends JFrame {
 	    // Database connection details
 
 	    String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-	    String username = "root";
-	    String password = "09242003Believeitcovered.";
+	    String username = "[username]"; //I didn't use my username to publicize the code
+	    String password = "[password]"; //I didn't use my password to publicize the code
 	    String RoomName[] = new String[3];
 	   
 	    try (Connection connection = DriverManager.getConnection(url, username, password)) {
