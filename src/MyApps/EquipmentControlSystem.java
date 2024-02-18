@@ -215,8 +215,8 @@ public class EquipmentControlSystem extends JFrame {
 	private void resetData() {
 	    // Database connection details
 	    String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-	    String username = "root";
-	    String password = "09242003Believeitcovered.";
+	    String username = "[username]"; //I didn't use my username to publicize the code
+	    String password = "[password]"; //I didn't use my password to publicize the code
 
 	    try (Connection connection = DriverManager.getConnection(url, username, password)) {
 	        // Delete existing data from EquipmentAssignmentToRoom table
@@ -242,8 +242,8 @@ public class EquipmentControlSystem extends JFrame {
 	    // Database connection details
 
 	    String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-	    String username = "root";
-	    String password = "09242003Believeitcovered.";
+	    String username = "[username]"; //I didn't use my username to publicize the code
+	    String password = "[password]"; //I didn't use my password to publicize the code
 
 	    try (Connection connection = DriverManager.getConnection(url, username, password)) {
 	    	String query = "SELECT eq.equipmentName, eq.equipmentType, eq.Equipmentcondition, r.RoomName, eq.eqStatus " +
