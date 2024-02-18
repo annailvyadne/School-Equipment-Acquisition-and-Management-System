@@ -202,8 +202,8 @@ public class EquipmentRequestForm extends JFrame {
 
 	    public String [] fetchEquipmentName() {
 		String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-	    String username = "root";
-	    String password = "09242003Believeitcovered.";
+	    String username = "[username]"; //I didn't use my username to publicize the code
+	    String password = "[password]"; //I didn't use my password to publicize the code
 	    String equipmentName[] = new String[5];
 		try (Connection connection = DriverManager.getConnection(url, username, password)) {
 			String query = "SELECT equipmentName FROM equipment WHERE eqStatus != 'In Storage'";
@@ -237,8 +237,8 @@ public class EquipmentRequestForm extends JFrame {
 		System.out.println(userID + "Ito yong ID");
 		//Connection details
 		String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-	    String username = "root";
-	    String password = "09242003Believeitcovered.";
+	    	String username = "[username]"; //I didn't use my username to publicize the code
+	    	String password = "[password]"; //I didn't use my password to publicize the code
 	   
 	    try(Connection connection = DriverManager.getConnection(url, username, password)) {
 	    	
@@ -279,8 +279,8 @@ public class EquipmentRequestForm extends JFrame {
 	public void fetchEquipmentReport() {
 		//Connection details
 		String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-	    String username = "root";
-	    String password = "09242003Believeitcovered.";
+	    	String username = "[username]"; //I didn't use my username to publicize the code
+	    	String password = "[password]"; //I didn't use my password to publicize the code
 	    
 	    try(Connection connection = DriverManager.getConnection(url, username, password)) {
 	    	String query = "SELECT idEquipmentID, equipmentName, equipmentCondition FROM equipment";
