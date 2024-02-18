@@ -129,8 +129,8 @@ public class SignUpAuthenticationForm extends JFrame {
 			     String role = cb_role.getSelectedItem().toString();
 			     
 		    	String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-		  	    String dbusername = "root";
-		  	    String dbpassword = "09242003Believeitcovered.";
+	   		String username = "[username]"; //I didn't use my username to publicize the code
+	    		String password = "[password]"; //I didn't use my password to publicize the code
 		  	    
 		    	try(Connection connection = DriverManager.getConnection(url, dbusername, dbpassword)){
 		    		connection.setAutoCommit(true);
@@ -230,8 +230,8 @@ public class SignUpAuthenticationForm extends JFrame {
 	}
 	private String [] getRole() {
 		String url = "jdbc:mysql://localhost:3306/equipment_management_db";
- 	    String username = "root";
- 	    String password = "09242003Believeitcovered.";
+	    String username = "[username]"; //I didn't use my username to publicize the code
+	    String password = "[password]"; //I didn't use my password to publicize the code
  	    String userRole [] = new String[4];
  	    try (Connection connection = DriverManager.getConnection(url, username, password)) {
  	    	String query = "SELECT userRoleName FROM userRole";
