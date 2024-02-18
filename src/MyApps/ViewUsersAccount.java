@@ -117,8 +117,8 @@ public class ViewUsersAccount extends JFrame {
 		private void clearData() {
 		    // Database connection details
 		    String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-		    String username = "root";
-		    String password = "09242003Believeitcovered.";
+	    	String username = "[username]"; //I didn't use my username to publicize the code
+	    	String password = "[password]"; //I didn't use my password to publicize the code
 
 		    try (Connection connection = DriverManager.getConnection(url, username, password)) {
 		        // Delete existing data from EquipmentAssignmentToRoom table
@@ -145,8 +145,8 @@ public class ViewUsersAccount extends JFrame {
 		
 	//MySQL database connection details
 	String url = "jdbc:mysql://localhost:3306/equipment_management_db";
-	String username = "root";
-	String password = "09242003Believeitcovered.";
+	    String username = "[username]"; //I didn't use my username to publicize the code
+	    String password = "[password]"; //I didn't use my password to publicize the code
 	
 	try (Connection connection = DriverManager.getConnection(url, username, password)) {
 		//fetch and populate data from Users table
